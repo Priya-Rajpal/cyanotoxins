@@ -1,0 +1,50 @@
+import csv
+import argparse
+
+def get_amino_acid_sequence(wp_number, csv_file):
+    with open(csv_file, mode='r') as file:
+        reader = csv.reader(file, delimiter=',')
+        for row in reader:
+            if len(row) > 0:
+                identifier = row[0].strip()
+                if identifier.startswith(wp_number):
+                    if len(row) > 1:
+                        sequence = row[1].strip()
+                        return sequence
+    return None
+
+def hamming_distance(seq1, seq2):
+    if len(seq1) != len(seq2):
+        raise ValueError("Sequences must be of equal length to calculate Hamming distance.")
+
+    return sum(1 for a, b in zip(seq1, seq2) if a != b)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Get amino acid sequence by WP number and compare to a standard sequence.")
+    parser.add_argument("wp_number", help="The WP number to search for.")
+    parser.add_argument("csv_file", help="The CSV file containing the sequences.")
+
+    args = parser.parse_args()
+    wp_number = args.wp_number.strip()
+    csv_file = args.csv_file
+
+    standard_sequence = "C Q R S C H".replace(" ", "")
+
+    sequence = get_amino_acid_sequence(wp_number, csv_file)
+
+    if sequence:
+        print(f"Amino acid sequence for {wp_number}: {sequence}")
+
+        # Ensure the sequence is the same length as the standard sequence for comparison
+        sequence = sequence.replace(" ", "")
+        if len(sequence) != len(standard_sequence):
+            print("Warning: Sequence length does not match the standard sequence length.")
+
+        # Calculate Hamming distance
+        try:
+            distance = hamming_distance(sequence, standard_sequence)
+            print(f"Hamming distance: {distance}")
+        except ValueError as e:
+            print(e)
+    else:
+        print(f"WP number {wp_number} not found in the file.")
