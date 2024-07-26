@@ -14,4 +14,4 @@ with open(sys.argv[1], 'r') as fasta:
 
 # iterate over key value pairs and print header and amino acid positions of interest (accounting for zero-based indexing)
 for header, seq in fasta_dict.items():
-	print header, ",", seq[155], seq[156], seq[158], seq[159], seq[161], seq[195], seq[346], seq[433], seq[435], seq[436], seq[629], seq[634], seq[844], seq[898]
+	print(header, ",", seq[155], seq[156], seq[158], seq[159], seq[161], seq[195], seq[346], seq[433], seq[435], seq[436], seq[629], seq[634], seq[844], seq[898])
